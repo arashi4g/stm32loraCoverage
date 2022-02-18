@@ -1,0 +1,20 @@
+Adafruit_BME680.cpp:72:1:Adafruit_BME680::Adafruit_BME680()	16	static
+Adafruit_BME680.cpp:131:6:bool Adafruit_BME680::begin(uint8_t, bool)	24	static
+Adafruit_BME680.cpp:253:7:float Adafruit_BME680::readTemperature()	16	static
+Adafruit_BME680.cpp:262:7:float Adafruit_BME680::readPressure()	16	static
+Adafruit_BME680.cpp:271:7:float Adafruit_BME680::readHumidity()	16	static
+Adafruit_BME680.cpp:280:10:uint32_t Adafruit_BME680::readGas()	16	static
+Adafruit_BME680.cpp:293:7:float Adafruit_BME680::readAltitude(float)	24	static
+Adafruit_BME680.cpp:312:6:bool Adafruit_BME680::performReading()	16	static
+Adafruit_BME680.cpp:314:15:long unsigned int Adafruit_BME680::beginReading()	24	static
+Adafruit_BME680.cpp:364:6:bool Adafruit_BME680::endReading()	48	static
+Adafruit_BME680.cpp:432:5:int Adafruit_BME680::remainingReadingMillis()	32	static
+Adafruit_BME680.cpp:449:6:bool Adafruit_BME680::setGasHeater(uint16_t, uint16_t)	16	static
+Adafruit_BME680.cpp:475:6:bool Adafruit_BME680::setTemperatureOversampling(uint8_t)	16	static
+Adafruit_BME680.cpp:497:6:bool Adafruit_BME680::setHumidityOversampling(uint8_t)	16	static
+Adafruit_BME680.cpp:519:6:bool Adafruit_BME680::setPressureOversampling(uint8_t)	16	static
+Adafruit_BME680.cpp:542:6:bool Adafruit_BME680::setIIRFilterSize(uint8_t)	16	static
+Adafruit_BME680.cpp:559:8:int8_t i2c_read(uint8_t, uint8_t, uint8_t*, uint16_t)	16	static
+Adafruit_BME680.cpp:597:8:int8_t i2c_write(uint8_t, uint8_t, uint8_t*, uint16_t)	16	static
+Adafruit_BME680.cpp:726:13:void delay_msec(uint32_t)	16	static
+cmath:415:5:constexpr typename __gnu_cxx::__promote_2<_Tp, _Up>::__type std::pow(_Tp, _Up) [with _Tp = float; _Up = double]	24	static
