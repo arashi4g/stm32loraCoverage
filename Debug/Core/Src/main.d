@@ -52,7 +52,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Src/u-blox_config_keys.h ../Core/Inc/sys_debug.h \
  ../Core/Inc/sys_conf.h ../Core/Inc/platform.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h \
- ../Core/Inc/sys_app.h ../Utilities/trace/adv_trace/stm32_adv_trace.h
+ ../Core/Inc/sys_app.h ../Utilities/trace/adv_trace/stm32_adv_trace.h \
+ ../Core/Inc/gpsCalls.h
 
 ../Core/Inc/main.h:
 
@@ -187,3 +188,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/sys_app.h:
 
 ../Utilities/trace/adv_trace/stm32_adv_trace.h:
+
+../Core/Inc/gpsCalls.h:

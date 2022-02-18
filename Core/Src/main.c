@@ -31,6 +31,7 @@
 #include "Ublox.h"
 #include "sys_debug.h"
 #include <sys_app.h>
+#include "gpsCalls.h"
 
 /* USER CODE END Includes */
 
@@ -58,16 +59,16 @@ Adafruit_BME680 bme; // I2C
 I2C_HandleTypeDef hi2c1;
 //TIM_HandleTypeDef htim1;
 
-int i = 0;
-long lastTime = 0; //Simple local timer. Limits amount if I2C traffic to Ublox module.
-byte i2cDataXX[] = { 0x00, 0x00 };
-uint16_t Hour = 0;
-uint16_t Minute = 0;
-uint16_t Second = 0;
+//int i = 0;
+//long lastTime = 0; //Simple local timer. Limits amount if I2C traffic to Ublox module.
+//byte i2cDataXX[] = { 0x00, 0x00 };
+//uint16_t Hour = 0;
+//uint16_t Minute = 0;
+//uint16_t Second = 0;
 
 #define doGPS 1
 
-SFE_UBLOX_GPS myGPS;
+//SFE_UBLOX_GPS myGPS;
 
 /* USER CODE END PV */
 
@@ -80,63 +81,63 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-void setupGPS();
-void loopGPS();
+//void setupGPS();
+//void loopGPS();
 
-void setupGPS() {
+//void setupGPS() {
+//
+//  //Wire.begin();
+//
+//	HAL_I2C_Master_Transmit( &hi2c1, ( 0x15 << 1 ), i2cDataXX, 1, 10 );
+//  while (myGPS.begin(0x42) == false) //Connect to the Ublox module using Wire port
+//  {
+//    //Serial.println(F("Ublox GPS not detected at default I2C address. Please check wiring. Freezing."));
+//    HAL_Delay(1);
+//	APP_LOG(TS_ON, VLEVEL_M, "Enters SETUP GPS in function \r\n");
+//		//HAL_I2C_Master_Transmit( &hi2c2, ( 0x16 << 1 ), i2cDataXX, 1, 10 );
+//    //while (1);
+//  }
+//	//HAL_I2C_Master_Transmit( &hi2c2, ( 0x17 << 1 ), i2cDataXX, 1, 10 );
+//
+//  myGPS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
+//	//HAL_I2C_Master_Transmit( &hi2c2, ( 0x18 << 1 ), i2cDataXX, 1, 10 );
+//  myGPS.saveConfiguration(); //Save the current settings to flash and BBR
+//	//HAL_I2C_Master_Transmit( &hi2c2, ( 0x19 << 1 ), i2cDataXX, 1, 10 );
+//}
 
-  //Wire.begin();
+//long longitude;
+//long altitude;
 
-	HAL_I2C_Master_Transmit( &hi2c1, ( 0x15 << 1 ), i2cDataXX, 1, 10 );
-  while (myGPS.begin(0x42) == false) //Connect to the Ublox module using Wire port
-  {
-    //Serial.println(F("Ublox GPS not detected at default I2C address. Please check wiring. Freezing."));
-    HAL_Delay(1);
-	APP_LOG(TS_ON, VLEVEL_M, "Enters SETUP GPS in function \r\n");
-		//HAL_I2C_Master_Transmit( &hi2c2, ( 0x16 << 1 ), i2cDataXX, 1, 10 );
-    //while (1);
-  }
-	//HAL_I2C_Master_Transmit( &hi2c2, ( 0x17 << 1 ), i2cDataXX, 1, 10 );
-
-  myGPS.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
-	//HAL_I2C_Master_Transmit( &hi2c2, ( 0x18 << 1 ), i2cDataXX, 1, 10 );
-  myGPS.saveConfiguration(); //Save the current settings to flash and BBR
-	//HAL_I2C_Master_Transmit( &hi2c2, ( 0x19 << 1 ), i2cDataXX, 1, 10 );
-}
-
-long longitude;
-long altitude;
-
-void loopGPS() {
-  bool timeValid = false, dateValid = false;
-  //Query module only every second. Doing it more often will just cause I2C traffic.
-  //The module only responds when a new position is available
-  if ( HAL_GetTick() - lastTime > 1000 ) {
-    lastTime = HAL_GetTick(); //Update the timer
-    long latitude = myGPS.getLatitude();
-		longitude = myGPS.getLongitude();
-    altitude = myGPS.getAltitude();
-    long accuracy = myGPS.getPositionAccuracy();
-
-		//printf( "latitude: %ld longitude: %ld \n", latitude, longitude );
-
-    	APP_LOG(TS_ON, VLEVEL_M, "Lati: %d, Long: %d \r\n", latitude, longitude);
-
-    byte SIV = myGPS.getSIV();
-
-    uint16_t Year = myGPS.getYear();
-    uint16_t Month = myGPS.getMonth();
-    uint16_t Day = myGPS.getDay();
-    Hour = myGPS.getHour();
-    Minute = myGPS.getMinute();
-    Second = myGPS.getSecond();
-
-//		printf( "Hour: %2d Minute: %2d Second: %2d\n", Hour, Minute, Second );
-
-//  timeValid = myGPS.getTimeValid();
-//  dateValid = myGPS.getDateValid();
-  }
-}
+//void loopGPS() {
+//  bool timeValid = false, dateValid = false;
+//  //Query module only every second. Doing it more often will just cause I2C traffic.
+//  //The module only responds when a new position is available
+//  if ( HAL_GetTick() - lastTime > 1000 ) {
+//    lastTime = HAL_GetTick(); //Update the timer
+//    long latitude = myGPS.getLatitude();
+//		longitude = myGPS.getLongitude();
+//    altitude = myGPS.getAltitude();
+//    long accuracy = myGPS.getPositionAccuracy();
+//
+//		//printf( "latitude: %ld longitude: %ld \n", latitude, longitude );
+//
+//    	APP_LOG(TS_ON, VLEVEL_M, "Lati: %d, Long: %d \r\n", latitude, longitude);
+//
+//    byte SIV = myGPS.getSIV();
+//
+//    uint16_t Year = myGPS.getYear();
+//    uint16_t Month = myGPS.getMonth();
+//    uint16_t Day = myGPS.getDay();
+//    Hour = myGPS.getHour();
+//    Minute = myGPS.getMinute();
+//    Second = myGPS.getSecond();
+//
+////		printf( "Hour: %2d Minute: %2d Second: %2d\n", Hour, Minute, Second );
+//
+////  timeValid = myGPS.getTimeValid();
+////  dateValid = myGPS.getDateValid();
+//  }
+//}
 
 
 void myMX_GPIO_Init(void)
