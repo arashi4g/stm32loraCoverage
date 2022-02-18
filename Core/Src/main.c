@@ -301,6 +301,7 @@ int main(void)
 
 
 HAL_Delay(10);
+HAL_Delay(100);
 
 
   /* USER CODE END 2 */
