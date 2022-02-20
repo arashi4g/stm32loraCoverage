@@ -18,8 +18,8 @@ uint16_t Minute = 0;
 uint16_t Second = 0;
 
 
-void setupGPS();
-void loopGPS();
+//void setupGPS();
+//void loopGPS();
 
 void setupGPS() {
 
@@ -27,7 +27,7 @@ void setupGPS() {
   while (myGPS.begin(0x42) == false) //Connect to the Ublox module using Wire port
   {
     HAL_Delay(1);
-	APP_LOG(TS_ON, VLEVEL_M, "Enters SETUP GPS in function \r\n");
+//	APP_LOG(TS_ON, VLEVEL_M, "Enters SETUP GPS in function \r\n");
 		//HAL_I2C_Master_Transmit( &hi2c2, ( 0x16 << 1 ), i2cDataXX, 1, 10 );
   }
 

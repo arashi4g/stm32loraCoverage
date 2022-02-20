@@ -1498,7 +1498,7 @@ uint8_t i2cData[10];
 	HalStateX = HAL_I2C_Master_Seq_Transmit_DMA( &hi2c1, ( I2CADR << 1 ), i2cData, 1, I2C_FIRST_AND_NEXT_FRAME );
 //	HalStateX = HAL_I2C_Master_Seq_Transmit_DMA( &hi2c1, ( I2CADR), i2cData, 1, I2C_FIRST_FRAME );
 	HAL_Delay(4);
-	APP_LOG(TS_ON, VLEVEL_M, "HalStateMain after First: %d\r\n", HalStateX);
+//	APP_LOG(TS_ON, VLEVEL_M, "HalStateMain after First: %d\r\n", HalStateX);
 
 HAL_Delay(4);
 	i2cOk();

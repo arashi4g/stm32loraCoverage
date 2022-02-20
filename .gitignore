@@ -5,3 +5,10 @@ Debug/Core/Src/main.d
 Debug/Core/Src/main.su
 Debug/Core/Src/main.o
 Debug/LoRaWAN_End_Node.bin
+*.o
+*.su
+*.o
+*.bin
+*.elf
+*.list
+*.map
