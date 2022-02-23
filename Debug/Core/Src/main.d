@@ -47,8 +47,10 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/CMSIS/Include/cmsis_compiler.h ../Utilities/misc/stm32_mem.h \
  ../Core/Inc/utilities_conf.h ../Utilities/misc/stm32_tiny_vsnprintf.h \
  ../Core/Inc/i2c.h ../Core/Inc/main.h ../LoRaWAN/App/app_lorawan.h \
- ../Core/Inc/tim.h ../Core/Inc/gpio.h ../Core/Inc/Adafruit_BME680.h \
- ../Core/Inc/bme680.h ../Core/Inc/bme680_defs.h ../Core/Src/Ublox.h \
+ ../Core/Inc/tim.h ../Core/Inc/gpio.h ../Utilities/timer/stm32_timer.h \
+ ../Utilities/sequencer/stm32_seq.h ../Core/Inc/utilities_def.h \
+ ../Core/Inc/Adafruit_BME680.h ../Core/Inc/bme680.h \
+ ../Core/Inc/bme680_defs.h ../Core/Src/Ublox.h \
  ../Core/Src/u-blox_config_keys.h ../Core/Inc/sys_debug.h \
  ../Core/Inc/sys_conf.h ../Core/Inc/platform.h \
  ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h \
@@ -167,6 +169,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/tim.h:
 
 ../Core/Inc/gpio.h:
+
+../Utilities/timer/stm32_timer.h:
+
+../Utilities/sequencer/stm32_seq.h:
+
+../Core/Inc/utilities_def.h:
 
 ../Core/Inc/Adafruit_BME680.h:
 

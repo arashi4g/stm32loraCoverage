@@ -9,6 +9,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\adria\OneDrive\Documents\GitHub"/>
 			<item value="/home/mrieger/STM32CubeIDE/workspace_1.5.1"/>
 			<item value="/home/mrieger/STM32CubeIDE/workspace_1.5.1/LoRaWAN_End_Node"/>
 		</list>

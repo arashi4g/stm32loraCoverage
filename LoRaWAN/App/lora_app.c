@@ -42,7 +42,8 @@
 
 /* External variables ---------------------------------------------------------*/
 /* USER CODE BEGIN EV */
-
+extern bool mLockout;
+extern bool isJoined;
 /* USER CODE END EV */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -192,13 +193,14 @@ static uint8_t AppLedStateOn = RESET;
 /**
   * @brief Type of Event to generate application Tx (default is TX_ON_TIMER)
   */
-static TxEventType_t EventType = TX_ON_TIMER;
+static TxEventType_t EventType = TX_ON_EVENT;
 
 /**
   * @brief Timer to handle the application Tx
   */
 static UTIL_TIMER_Object_t TxTimer;
-
+//UTIL_TIMER_Object_t TxTimer;
+//extern TxTimer;
 /**
   * @brief Timer to handle the application Tx Led to toggle
   */
@@ -642,22 +644,22 @@ static void OnTxData(LmHandlerTxParams_t *params)
     UTIL_TIMER_Start(&TxLedTimer);
 
     APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### ========== MCPS-Confirm =============\r\n");
-    APP_LOG(TS_OFF, VLEVEL_H, "###### U/L FRAME:%04d | PORT:%d | DR:%d | PWR:%d", params->UplinkCounter,
+    APP_LOG(TS_OFF, VLEVEL_M, "###### U/L FRAME:%04d | PORT:%d | DR:%d | PWR:%d", params->UplinkCounter,
             params->AppData.Port, params->Datarate, params->TxPower);
-
-    APP_LOG(TS_OFF, VLEVEL_H, " | MSG TYPE:");
+    mLockout = false;
+    APP_LOG(TS_OFF, VLEVEL_M, " | MSG TYPE:");
     if (params->MsgType == LORAMAC_HANDLER_CONFIRMED_MSG)
     {
-      APP_LOG(TS_OFF, VLEVEL_H, "CONFIRMED [%s]\r\n", (params->AckReceived != 0) ? "ACK" : "NACK");
+      APP_LOG(TS_OFF, VLEVEL_M, "CONFIRMED [%s]\r\n", (params->AckReceived != 0) ? "ACK" : "NACK");
     }
     else
     {
-      APP_LOG(TS_OFF, VLEVEL_H, "UNCONFIRMED\r\n");
+      APP_LOG(TS_OFF, VLEVEL_M, "UNCONFIRMED\r\n");
     }
   }
 
   /* USER CODE BEGIN OnTxData_2 */
-
+  mLockout = false;			//not in standard program! defined myself
   /* USER CODE END OnTxData_2 */
 }
 
@@ -687,16 +689,18 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
       else
       {
         APP_LOG(TS_OFF, VLEVEL_M, "OTAA =====================\r\n");
+        isJoined = true;
       }
     }
     else
     {
       APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### = JOIN FAILED this?\r\n");
+//      isJoined = false;
     }
   }
 
   /* USER CODE BEGIN OnJoinRequest_2 */
-
+ mLockout = false;
   /* USER CODE END OnJoinRequest_2 */
 }
 
