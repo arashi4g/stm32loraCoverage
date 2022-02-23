@@ -22,6 +22,7 @@
 #include "i2c.h"
 #include "app_lorawan.h"
 #include "tim.h"
+#include <math.h>
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -32,12 +33,35 @@
 #include "sys_debug.h"
 #include <sys_app.h>
 #include "gpsCalls.h"
+#include "radio_driver.h"
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+#define PI 3.14159265358979323846
+#define EARTH_R 6371000.0				//approximation of earth radius in m
+#define MIN_DIST 30						//minimum distance between measurement point
 
+float degtoRad(long degrees){
+
+    float deg = (float)degrees/10000000;
+	float radians = (deg / 180.0)* PI ;
+	return radians;
+}
+
+
+float haversineDistance(float (*f)(long), long longitude1, long latitude1, long longitude2, long latitude2 ){
+
+	float delta_lat = degtoRad(latitude2 - latitude1);
+	float delta_long = degtoRad(longitude2 - longitude1);
+
+	float a =  pow(   sin(  delta_lat/2.0 ), 2 ) + cos(degtoRad(latitude1))* cos(degtoRad(latitude2))*pow(sin(delta_long/2.0), 2);
+    float c = 2*atan2(sqrt(a), sqrt(1-a));
+
+    float distance = EARTH_R * c;
+	return distance;
+}
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -107,7 +131,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_LoRaWAN_Init();
+  MX_LoRaWAN_Init();					// mainly runs LoRaWAN_Init() function defined in lora_app.c
   MX_I2C1_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
@@ -129,6 +153,16 @@ int main(void)
 	HAL_Delay(100);
 #endif
 
+	long latitude, longitude;
+
+//	long arrlatitude[10];
+//	long arrlong[10];
+	float distance = 0;
+//	int arrInd = 0;
+	bool firstrun = true;
+	long arrLastPoint[2]; 				//lati in element 0, longitude in element 1
+
+	MX_LoRaWAN_Process();
 
   /* USER CODE END 2 */
 
@@ -143,9 +177,50 @@ int main(void)
 	  APP_LOG(TS_ON, VLEVEL_M, "counter: %d\r\n", counter);
 	  counter = 0;
 	}
-//    MX_LoRaWAN_Process();
-	loopGPS();
-	HAL_Delay(100);
+    MX_LoRaWAN_Process();							// mainly runs UTIL_SEQ_Run() defined in stm32_seq.c
+//    HAL_Delay(100);
+
+
+	loopGPS(&latitude, &longitude);
+//	APP_LOG(TS_ON, VLEVEL_M, "lat: %d, long: %d \r\n", latitude, longitude);
+//	HAL_Delay(100);
+//
+	long groundSpeed = loopsGroundSpeed();
+
+//		if((arrInd==0) && !firstrun ){
+//			distance = haversineDistance(degtoRad, arrlong[9], arrlatitude[9], arrlong[arrInd], arrlatitude[arrInd]);
+//			APP_LOG(TS_ON, VLEVEL_M, "Distance: if 1 %d \r\n", distance);
+//		}else if(arrInd>0){
+//			distance = haversineDistance(degtoRad, arrlong[arrInd-1], arrlatitude[arrInd-1], arrlong[arrInd], arrlatitude[arrInd]);
+//			APP_LOG(TS_ON, VLEVEL_M, "Distance: if 2 %d \r\n", distance);
+//		}
+
+//	int rssi = SUBGRF_GetRssiInst();
+
+//	APP_LOG(TS_ON, VLEVEL_M, "Rssi: %d \r\n", rssi);
+//
+//	if(firstrun){
+//		// insert save of current rssi and maybe initiate send of message
+//		arrLastPoint[0] = latitude;
+//		arrLastPoint[1] = longitude;
+//		firstrun = false;
+//	}else if(!firstrun){
+//		distance = haversineDistance(degtoRad, arrLastPoint[1], arrLastPoint[0], longitude, latitude);
+//	}
+//
+//	if(distance>MIN_DIST){
+//		arrLastPoint[0] = latitude;
+//		arrLastPoint[1] = longitude;
+//	}
+
+
+//	arrInd++;
+	firstrun = false;
+//	if(arrInd>9){
+//		arrInd = 0;
+//		firstrun = false;
+//	}
+
   }
     /* USER CODE END WHILE */
 

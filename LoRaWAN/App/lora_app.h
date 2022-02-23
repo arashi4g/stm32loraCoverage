@@ -41,7 +41,7 @@ extern "C" {
 #define ACTIVE_REGION                               LORAMAC_REGION_EU868
 
 /*!
- * CAYENNE_LPP is myDevices Application server.
+ * CAYENNE_LPP is myDevices Application server.				//define CAYENNE_LPP to use the CAYENNE FORMAT
  */
 /*#define CAYENNE_LPP*/
 

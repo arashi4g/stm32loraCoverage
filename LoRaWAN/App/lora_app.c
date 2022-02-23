@@ -190,7 +190,7 @@ static LmHandlerParams_t LmHandlerParams =
 static uint8_t AppLedStateOn = RESET;
 
 /**
-  * @brief Type of Event to generate application Tx
+  * @brief Type of Event to generate application Tx (default is TX_ON_TIMER)
   */
 static TxEventType_t EventType = TX_ON_TIMER;
 
@@ -353,7 +353,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   switch (GPIO_Pin)
   {
     case  SYS_BUTTON1_PIN:
-      /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialised */
+      /* Note: when "EventType == " this GPIO is not initialised */
       UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
       /* USER CODE BEGIN EXTI_Callback_Switch_B1 */
       /* USER CODE END EXTI_Callback_Switch_B1 */
@@ -691,7 +691,7 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
     }
     else
     {
-      APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### = JOIN FAILED\r\n");
+      APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### = JOIN FAILED this?\r\n");
     }
   }
 
