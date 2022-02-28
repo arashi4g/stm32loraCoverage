@@ -26,8 +26,11 @@
 #include "gpio.h"
 
 #include "stm32_timer.h"
-#include "stm32_seq.h"
+#include "stm32_seq.h"				//access to sequencer functions in main
 #include "utilities_def.h"
+
+#include "radio_driver.h"		//radio drivers to access RSSI and SNR values
+#include "LmHandler.h"			//LmHandler to have access to send function in main
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
@@ -173,7 +176,7 @@ int main(void)
 	bool firstrun = true;
 	long arrLastPoint[2]; 				//lati in element 0, longitude in element 1
 
-	MX_LoRaWAN_Process();
+
 
   /* USER CODE END 2 */
 
@@ -247,7 +250,7 @@ int main(void)
     }
 
 //	arrInd++;
-	firstrun = false;
+//	firstrun = false;
 //	if(arrInd>9){
 //		arrInd = 0;
 //		firstrun = false;
