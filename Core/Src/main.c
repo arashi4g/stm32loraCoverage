@@ -176,6 +176,15 @@ int main(void)
 	bool firstrun = true;
 	long arrLastPoint[2]; 				//lati in element 0, longitude in element 1
 
+	static uint8_t AppDataBuffer[242];
+
+	PacketStatus_t pktStatus;
+	LmHandlerErrorStatus_t sendErrors;
+	LmHandlerAppData_t triggerRssi = {0, 0, AppDataBuffer};
+	LmHandlerMsgTypes_t feedbackConfirm = LORAMAC_HANDLER_CONFIRMED_MSG;
+
+	//triggerRssi.Buffer[i++] = (uint8_t) 0x01;
+	triggerRssi.BufferSize = 0;
 
 
   /* USER CODE END 2 */
