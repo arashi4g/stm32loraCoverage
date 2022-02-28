@@ -47,12 +47,25 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/CMSIS/Include/cmsis_compiler.h ../Utilities/misc/stm32_mem.h \
  ../Core/Inc/utilities_conf.h ../Utilities/misc/stm32_tiny_vsnprintf.h \
  ../Core/Inc/i2c.h ../Core/Inc/main.h ../LoRaWAN/App/app_lorawan.h \
- ../Core/Inc/tim.h ../Core/Inc/gpio.h ../Core/Inc/Adafruit_BME680.h \
- ../Core/Inc/bme680.h ../Core/Inc/bme680_defs.h ../Core/Src/Ublox.h \
+ ../Core/Inc/tim.h ../Core/Inc/gpio.h \
+ ../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_driver.h \
+ ../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.h \
+ ../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandlerTypes.h \
+ ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.h \
+ ../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.h \
+ ../LoRaWAN/Target/timer.h ../Utilities/timer/stm32_timer.h \
+ ../LoRaWAN/Target/systime.h ../Utilities/misc/stm32_systime.h \
+ ../Middlewares/Third_Party/SubGHz_Phy/radio.h \
+ ../Middlewares/Third_Party/SubGHz_Phy/radio_ex.h \
+ ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacTypes.h \
+ ../LoRaWAN/Target/lorawan_conf.h ../Core/Inc/sys_app.h \
+ ../Core/Inc/sys_conf.h ../Utilities/trace/adv_trace/stm32_adv_trace.h \
+ ../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacClassB.h \
+ ../Core/Inc/Adafruit_BME680.h ../Core/Inc/bme680.h \
+ ../Core/Inc/bme680_defs.h ../Core/Src/Ublox.h \
  ../Core/Src/u-blox_config_keys.h ../Core/Inc/sys_debug.h \
- ../Core/Inc/sys_conf.h ../Core/Inc/platform.h \
- ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h \
- ../Core/Inc/sys_app.h ../Utilities/trace/adv_trace/stm32_adv_trace.h
+ ../Core/Inc/platform.h \
+ ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h
 
 ../Core/Inc/main.h:
 
@@ -166,6 +179,40 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Core/Inc/gpio.h:
 
+../Middlewares/Third_Party/SubGHz_Phy/stm32_radio_driver/radio_driver.h:
+
+../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandler.h:
+
+../Middlewares/Third_Party/LoRaWAN/LmHandler/LmHandlerTypes.h:
+
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMac.h:
+
+../Middlewares/Third_Party/LoRaWAN/Utilities/utilities.h:
+
+../LoRaWAN/Target/timer.h:
+
+../Utilities/timer/stm32_timer.h:
+
+../LoRaWAN/Target/systime.h:
+
+../Utilities/misc/stm32_systime.h:
+
+../Middlewares/Third_Party/SubGHz_Phy/radio.h:
+
+../Middlewares/Third_Party/SubGHz_Phy/radio_ex.h:
+
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacTypes.h:
+
+../LoRaWAN/Target/lorawan_conf.h:
+
+../Core/Inc/sys_app.h:
+
+../Core/Inc/sys_conf.h:
+
+../Utilities/trace/adv_trace/stm32_adv_trace.h:
+
+../Middlewares/Third_Party/LoRaWAN/Mac/LoRaMacClassB.h:
+
 ../Core/Inc/Adafruit_BME680.h:
 
 ../Core/Inc/bme680.h:
@@ -178,12 +225,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Core/Inc/sys_debug.h:
 
-../Core/Inc/sys_conf.h:
-
 ../Core/Inc/platform.h:
 
 ../Drivers/STM32WLxx_HAL_Driver/Inc/stm32wlxx_ll_gpio.h:
-
-../Core/Inc/sys_app.h:
-
-../Utilities/trace/adv_trace/stm32_adv_trace.h:

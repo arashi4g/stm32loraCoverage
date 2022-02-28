@@ -24,6 +24,10 @@
 #include "tim.h"
 #include "gpio.h"
 
+#include "radio_driver.h"
+#include "LmHandler.h"
+
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
@@ -299,6 +303,18 @@ int main(void)
 	HAL_Delay(100);
 #endif
 
+long deviceEUI;
+int8_t devEUIp;
+
+static uint8_t AppDataBuffer[242];
+
+PacketStatus_t pktStatus;
+LmHandlerErrorStatus_t sendErrors;
+LmHandlerAppData_t triggerRssi = {0, 0, AppDataBuffer};
+LmHandlerMsgTypes_t feedbackConfirm = LORAMAC_HANDLER_CONFIRMED_MSG;
+
+//triggerRssi.Buffer[i++] = (uint8_t) 0x01;
+triggerRssi.BufferSize = 0;
 
 HAL_Delay(10);
 
@@ -313,12 +329,24 @@ HAL_Delay(10);
 		//printf("... vor ... MX_LoRaWAN_Process() ... counter: %d \n", counter++);
 	if ( counter++ > 1000 ) {
 	  HAL_GPIO_TogglePin(GPIOB, LED1_Pin);
-	  APP_LOG(TS_ON, VLEVEL_M, "counter: %d\r\n", counter);
+//	  APP_LOG(TS_ON, VLEVEL_M, "counter: %d\r\n", counter);
 	  counter = 0;
 	}
     /* USER CODE END WHILE */
-//    MX_LoRaWAN_Process();
-	loopGPS();
+    MX_LoRaWAN_Process();
+
+
+//   long devEUIss = LmHandlerGetTxPower(&devEUIp);
+LmHandlerSend(&triggerRssi, feedbackConfirm, 0, false);
+
+//HAL_Delay(1000);
+   SUBGRF_GetPacketStatus(&pktStatus);
+
+   if(counter%10 == 0){
+	  APP_LOG(TS_ON, VLEVEL_M, "Return Value: %d\r\n", pktStatus.Params.LoRa.RssiPkt);
+//	   APP_LOG(TS_ON, VLEVEL_M, "counter: %d\r\n", counter);
+   }
+//	loopGPS();
     /* USER CODE BEGIN 3 */
 		//HAL_Delay(100);
 	}

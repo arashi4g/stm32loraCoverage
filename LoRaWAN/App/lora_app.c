@@ -401,7 +401,7 @@ static void OnRxData(LmHandlerAppData_t *appData, LmHandlerRxParams_t *params)
     static const char *slotStrings[] = { "1", "2", "C", "C Multicast", "B Ping-Slot", "B Multicast Ping-Slot" };
 
     APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### ========== MCPS-Indication ==========\r\n");
-    APP_LOG(TS_OFF, VLEVEL_H, "###### D/L FRAME:%04d | SLOT:%s | PORT:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
+    APP_LOG(TS_OFF, VLEVEL_M, "###### D/L FRAME:%04d | SLOT:%s | PORT:%d | DR:%d | RSSI:%d | SNR:%d\r\n",
             params->DownlinkCounter, slotStrings[params->RxSlot], appData->Port, params->Datarate, params->Rssi, params->Snr);
     switch (appData->Port)
     {
@@ -516,12 +516,12 @@ static void SendTxData(void)
 #else  /* not CAYENNE_LPP */
   humidity    = (uint16_t)(sensor_data.humidity * 10);            /* in %*10     */
 
-  AppData.Buffer[i++] = AppLedStateOn;
+//  AppData.Buffer[i++] = AppLedStateOn;
   AppData.Buffer[i++] = (uint8_t)((pressure >> 8) & 0xFF);
   AppData.Buffer[i++] = (uint8_t)(pressure & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)(temperature & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)((humidity >> 8) & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)(humidity & 0xFF);
+//  AppData.Buffer[i++] = (uint8_t)(temperature & 0xFF);
+//  AppData.Buffer[i++] = (uint8_t)((humidity >> 8) & 0xFF);
+//  AppData.Buffer[i++] = (uint8_t)(humidity & 0xFF);
 
   if ((LmHandlerParams.ActiveRegion == LORAMAC_REGION_US915) || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AU915)
       || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AS923))
@@ -537,14 +537,14 @@ static void SendTxData(void)
     longitude = sensor_data.longitude;
 
     AppData.Buffer[i++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
-    AppData.Buffer[i++] = (uint8_t)((latitude >> 16) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((latitude >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(latitude & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((longitude >> 16) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((longitude >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(longitude & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((altitudeGps >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(altitudeGps & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((latitude >> 16) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((latitude >> 8) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)(latitude & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((longitude >> 16) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((longitude >> 8) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)(longitude & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((altitudeGps >> 8) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)(altitudeGps & 0xFF);
   }
 
   AppData.BufferSize = i;
@@ -642,7 +642,7 @@ static void OnTxData(LmHandlerTxParams_t *params)
     UTIL_TIMER_Start(&TxLedTimer);
 
     APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### ========== MCPS-Confirm =============\r\n");
-    APP_LOG(TS_OFF, VLEVEL_H, "###### U/L FRAME:%04d | PORT:%d | DR:%d | PWR:%d", params->UplinkCounter,
+    APP_LOG(TS_OFF, VLEVEL_M, "###### U/L FRAME:%04d | PORT:%d | DR:%d | PWR:%d", params->UplinkCounter,
             params->AppData.Port, params->Datarate, params->TxPower);
 
     APP_LOG(TS_OFF, VLEVEL_H, " | MSG TYPE:");
