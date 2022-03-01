@@ -26,3 +26,4 @@ Debug/LoRaWAN_End_Node.bin
 Debug/makefile
 *.o
 *.su
+*.prefs
