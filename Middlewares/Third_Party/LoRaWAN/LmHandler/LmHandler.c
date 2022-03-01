@@ -622,7 +622,6 @@ LmHandlerErrorStatus_t LmHandlerSend(LmHandlerAppData_t *appData, LmHandlerMsgTy
       mcpsReq.Req.Confirmed.NbTrials = 8;
     }
   }
-
   TxParams.AppData = *appData;
   TxParams.Datarate = LmHandlerParams.TxDatarate;
 

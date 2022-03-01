@@ -44,6 +44,12 @@
 /* USER CODE BEGIN EV */
 extern bool mLockout;
 extern bool isJoined;
+extern bool rxReceived;
+extern long arrLastPoint[2];
+
+//long latitude = arrLastPoint[0];
+//long longitude = arrLastPoint[1];
+
 /* USER CODE END EV */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -480,6 +486,7 @@ static void SendTxData(void)
   int16_t temperature = 0;
   sensor_t sensor_data;
   UTIL_TIMER_Time_t nextTxIn = 0;
+//  extern long arrLastPoint[];
 
 #ifdef CAYENNE_LPP
   uint8_t channel = 0;
@@ -518,35 +525,46 @@ static void SendTxData(void)
 #else  /* not CAYENNE_LPP */
   humidity    = (uint16_t)(sensor_data.humidity * 10);            /* in %*10     */
 
-  AppData.Buffer[i++] = AppLedStateOn;
-  AppData.Buffer[i++] = (uint8_t)((pressure >> 8) & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)(pressure & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)(temperature & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)((humidity >> 8) & 0xFF);
-  AppData.Buffer[i++] = (uint8_t)(humidity & 0xFF);
+//  AppData.Buffer[i++] = AppLedStateOn;
+//  AppData.Buffer[i++] = (uint8_t)((pressure >> 8) & 0xFF);
+//  AppData.Buffer[i++] = (uint8_t)(pressure & 0xFF);
+//  AppData.Buffer[i++] = (uint8_t)(temperature & 0xFF);
+//  AppData.Buffer[i++] = (uint8_t)((humidity >> 8) & 0xFF);
+//  AppData.Buffer[i++] = (uint8_t)(humidity & 0xFF);
 
   if ((LmHandlerParams.ActiveRegion == LORAMAC_REGION_US915) || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AU915)
       || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AS923))
   {
-    AppData.Buffer[i++] = 0;
-    AppData.Buffer[i++] = 0;
-    AppData.Buffer[i++] = 0;
-    AppData.Buffer[i++] = 0;
+//    AppData.Buffer[i++] = 0;
+//    AppData.Buffer[i++] = 0;
+//    AppData.Buffer[i++] = 0;
+//    AppData.Buffer[i++] = 0;
   }
   else
   {
     latitude = sensor_data.latitude;
     longitude = sensor_data.longitude;
 
-    AppData.Buffer[i++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
-    AppData.Buffer[i++] = (uint8_t)((latitude >> 16) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((latitude >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(latitude & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((longitude >> 16) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((longitude >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(longitude & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)((altitudeGps >> 8) & 0xFF);
-    AppData.Buffer[i++] = (uint8_t)(altitudeGps & 0xFF);
+//    AppData.Buffer[i++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
+//    AppData.Buffer[i++] = (uint8_t)((latitude >> 16) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((latitude >> 8) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)(latitude & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((longitude >> 16) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((longitude >> 8) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)(longitude & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)((altitudeGps >> 8) & 0xFF);
+//    AppData.Buffer[i++] = (uint8_t)(altitudeGps & 0xFF);
+
+	AppData.Buffer[i++] = (uint8_t) ((0x01) & 0xFF);
+//	AppData.Buffer[i++] = (uint8_t) ((latitude >> 16) & 0xFF);
+//	AppData.Buffer[i++] = (uint8_t) ((latitude >> 8) & 0xFF);
+//	AppData.Buffer[i++] = (uint8_t) (latitude & 0xFF);
+//
+//	AppData.Buffer[i++] = (uint8_t) ((arrLastPoint[1] >> 24) & 0xFF);
+//	AppData.Buffer[i++] = (uint8_t) ((arrLastPoint[1] >> 16) & 0xFF);
+//	AppData.Buffer[i++] = (uint8_t) ((arrLastPoint[1] >> 8) & 0xFF);
+//	AppData.Buffer[i++] = (uint8_t) (arrLastPoint[1] & 0xFF);
+
   }
 
   AppData.BufferSize = i;
@@ -554,7 +572,7 @@ static void SendTxData(void)
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
-    APP_LOG(TS_ON, VLEVEL_L, "SEND REQUEST\r\n");
+    APP_LOG(TS_ON, VLEVEL_M, "SEND REQUEST\r\n");
   }
   else if (nextTxIn > 0)
   {
@@ -655,11 +673,12 @@ static void OnTxData(LmHandlerTxParams_t *params)
     else
     {
       APP_LOG(TS_OFF, VLEVEL_M, "UNCONFIRMED\r\n");
+      rxReceived = false;
     }
   }
 
   /* USER CODE BEGIN OnTxData_2 */
-  mLockout = false;			//not in standard program! defined myself
+//  mLockout = false;			//not in standard program! defined myself
   /* USER CODE END OnTxData_2 */
 }
 
@@ -690,12 +709,14 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
       {
         APP_LOG(TS_OFF, VLEVEL_M, "OTAA =====================\r\n");
         isJoined = true;
+        rxReceived = false;
       }
     }
     else
     {
       APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### = JOIN FAILED this?\r\n");
-//      isJoined = false;
+      isJoined = false;
+      rxReceived = false;
     }
   }
 

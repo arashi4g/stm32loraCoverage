@@ -18,3 +18,11 @@ Debug/LoRaWAN_End_Node.bin
 *.elf
 *.map
 *.list
+*.o
+*.su
+*.elf
+*.list
+*.map
+Debug/makefile
+*.o
+*.su

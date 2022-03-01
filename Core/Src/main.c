@@ -73,6 +73,55 @@ float haversineDistance(float (*f)(long), long longitude1, long latitude1, long 
     float distance = EARTH_R * c;
 	return distance;
 }
+
+static uint8_t AppDataBufferMeasure[242];
+
+static LmHandlerAppData_t measureMessage = {0, 0, AppDataBufferMeasure};
+
+void sendData(long latitude, long longitude, int8_t rssi, int8_t snr){
+
+	uint32_t i = 0;
+
+	LmHandlerErrorStatus_t sendErrorsMsg;
+	LmHandlerMsgTypes_t feedbackConfirmData = LORAMAC_HANDLER_UNCONFIRMED_MSG;
+
+	measureMessage.Port = 1;
+
+
+
+	measureMessage.Buffer[i++] = (uint8_t) ((latitude >> 24) & 0xFF);
+	measureMessage.Buffer[i++] = (uint8_t) ((latitude >> 16) & 0xFF);
+	measureMessage.Buffer[i++] = (uint8_t) ((latitude >> 8) & 0xFF);
+	measureMessage.Buffer[i++] = (uint8_t) (latitude & 0xFF);
+
+	measureMessage.Buffer[i++] = (uint8_t) ((longitude >> 24) & 0xFF);
+	measureMessage.Buffer[i++] = (uint8_t) ((longitude >> 16) & 0xFF);
+	measureMessage.Buffer[i++] = (uint8_t) ((longitude >> 8) & 0xFF);
+	measureMessage.Buffer[i++] = (uint8_t) (longitude & 0xFF);
+
+	measureMessage.Buffer[i++] = rssi;
+	measureMessage.Buffer[i++] = snr;
+
+	measureMessage.BufferSize = i;
+
+	LmHandlerSend(&measureMessage, feedbackConfirmData, 0, false);
+
+//	measureMessage.BufferSize = 0;
+
+}
+
+void gaugeRssi(void){
+	static uint8_t AppDataBuffer[242];
+
+	LmHandlerErrorStatus_t sendErrorsFeedback;
+	LmHandlerAppData_t triggerRssi = {0, 0, AppDataBuffer};
+	LmHandlerMsgTypes_t feedbackConfirm = LORAMAC_HANDLER_CONFIRMED_MSG;
+
+	//triggerRssi.Buffer[i++] = (uint8_t) 0x01;
+	triggerRssi.BufferSize = 0;
+
+	LmHandlerSend(&triggerRssi, feedbackConfirm, 0, false);
+}
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -90,6 +139,7 @@ float haversineDistance(float (*f)(long), long longitude1, long latitude1, long 
 /* USER CODE BEGIN PV */
 int counter = 0;
 int counterExtra = 0;
+int waitrxTimeout = 0;
 Adafruit_BME680 bme; // I2C
 I2C_HandleTypeDef hi2c1;
 
@@ -114,6 +164,7 @@ void SystemClock_Config(void);
 
 bool mLockout = false;
 bool isJoined = false;
+bool rxReceived = false;				//set externally in case of received MAC rx in LoRaMac.c (replace in case CUBEMX overwrites)
 
 /* USER CODE END 0 */
 
@@ -176,15 +227,9 @@ int main(void)
 	bool firstrun = true;
 	long arrLastPoint[2]; 				//lati in element 0, longitude in element 1
 
-	static uint8_t AppDataBuffer[242];
-
 	PacketStatus_t pktStatus;
-	LmHandlerErrorStatus_t sendErrors;
-	LmHandlerAppData_t triggerRssi = {0, 0, AppDataBuffer};
-	LmHandlerMsgTypes_t feedbackConfirm = LORAMAC_HANDLER_CONFIRMED_MSG;
 
-	//triggerRssi.Buffer[i++] = (uint8_t) 0x01;
-	triggerRssi.BufferSize = 0;
+
 
 
   /* USER CODE END 2 */
@@ -200,14 +245,13 @@ int main(void)
 	  APP_LOG(TS_ON, VLEVEL_M, "counter: %d\r\n", counter);
 	  counter = 0;
 	  mLockout = false;
+//	  rxReceived = false;
 	}
-	if(mLockout) {
+	if(mLockout ) {
 		MX_LoRaWAN_Process();							// mainly runs UTIL_SEQ_Run() defined in stm32_seq.c
+    	APP_LOG(TS_ON, VLEVEL_M, "Main LoRaprocess \r\n");
 	}
-//    UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
 
-//    UTIL_TIMER_Start(&TxTimer);
-//    HAL_Delay(100);
 
     if(!isJoined && !mLockout){
     	mLockout = true;
@@ -220,9 +264,7 @@ int main(void)
     if(!mLockout && isJoined){
     	APP_LOG(TS_ON, VLEVEL_M, "Main if \r\n");
 		loopGPS(&latitude, &longitude);
-//		APP_LOG(TS_ON, VLEVEL_M, "lat: %d, long: %d \r\n", latitude, longitude);
-	//	HAL_Delay(100);
-	//
+
 //		long groundSpeed = loopsGroundSpeed();
 
 	//		if((arrInd==0) && !firstrun ){
@@ -233,27 +275,54 @@ int main(void)
 	//			APP_LOG(TS_ON, VLEVEL_M, "Distance: if 2 %d \r\n", distance);
 	//		}
 
-//		int rssi = SUBGRF_GetRssiInst();
-
-//		APP_LOG(TS_ON, VLEVEL_M, "Rssi: %d \r\n", rssi);
-	//
 		if(firstrun){
-	//		// insert save of current rssi and maybe initiate send of message
+			// insert save of current rssi and maybe initiate send of message
+
+//			gaugeRssi();
+
+			SUBGRF_GetPacketStatus(&pktStatus);
 			arrLastPoint[0] = latitude;
 			arrLastPoint[1] = longitude;
+
+//			sendData(arrLastPoint[0], arrLastPoint[1]);
+
 			firstrun = false;
 		} else if ( !firstrun ) {
 			distance = haversineDistance(degtoRad, arrLastPoint[1], arrLastPoint[0], longitude, latitude);
 		}
 
 		if((distance>MIN_DIST) || (counterExtra++ > 5)){
+	    	APP_LOG(TS_ON, VLEVEL_M, "Gauge Rssi \r\n");
+//			gaugeRssi();
+			while(!rxReceived){
+				gaugeRssi();
+				MX_LoRaWAN_Process();
+		    	APP_LOG(TS_ON, VLEVEL_M, "Waiting for MAC rxDone \r\n");
+		    	if(waitrxTimeout++ > 2000){
+		    		rxReceived = true;
+		    		waitrxTimeout = 0;
+		    	}
+
+			}
+			rxReceived = true;
+			SUBGRF_GetPacketStatus(&pktStatus);
+			APP_LOG(TS_ON, VLEVEL_M, "Reset rxReceived \r\n");
+			counterExtra = 0;
+		}
+
+
+
+		if(rxReceived){
 			APP_LOG(TS_ON, VLEVEL_M, "Send if \r\n");
 
+			APP_LOG(TS_ON, VLEVEL_M, "RSSI: %d, SNR: %d \r\n", pktStatus.Params.LoRa.RssiPkt, pktStatus.Params.LoRa.SnrPkt);
 			arrLastPoint[0] = latitude;
 			arrLastPoint[1] = longitude;
 			mLockout = true;
-			UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
-			counterExtra = 0;
+//			rxReceived = false;
+//			UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
+			sendData(arrLastPoint[0], arrLastPoint[1], pktStatus.Params.LoRa.RssiPkt, pktStatus.Params.LoRa.SnrPkt);
+//			counterExtra = 0;
 
 		}
     }
