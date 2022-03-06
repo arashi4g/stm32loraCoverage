@@ -117,7 +117,7 @@ void gaugeRssi(void){
 	LmHandlerAppData_t triggerRssi = {0, 0, AppDataBuffer};
 	LmHandlerMsgTypes_t feedbackConfirm = LORAMAC_HANDLER_CONFIRMED_MSG;
 
-	//triggerRssi.Buffer[i++] = (uint8_t) 0x01;
+//	triggerRssi.Buffer[0] = (uint8_t) 0x02;
 	triggerRssi.BufferSize = 0;
 
 	LmHandlerSend(&triggerRssi, feedbackConfirm, 0, false);
@@ -291,14 +291,14 @@ int main(void)
 			distance = haversineDistance(degtoRad, arrLastPoint[1], arrLastPoint[0], longitude, latitude);
 		}
 
-		if((distance>MIN_DIST) || (counterExtra++ > 5)){
+		if((distance>MIN_DIST) || (counterExtra++ > 40)){
 	    	APP_LOG(TS_ON, VLEVEL_M, "Gauge Rssi \r\n");
-//			gaugeRssi();
+			gaugeRssi();
 			while(!rxReceived){
-				gaugeRssi();
+//				gaugeRssi();
 				MX_LoRaWAN_Process();
 		    	APP_LOG(TS_ON, VLEVEL_M, "Waiting for MAC rxDone \r\n");
-		    	if(waitrxTimeout++ > 2000){
+		    	if(waitrxTimeout++ > 3000){
 		    		rxReceived = true;
 		    		waitrxTimeout = 0;
 		    	}

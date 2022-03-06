@@ -89,8 +89,8 @@ all: main-build
 main-build: LoRaWAN_End_Node.elf secondary-outputs
 
 # Tool invocations
-LoRaWAN_End_Node.elf: $(OBJS) $(USER_OBJS) C:\Users\adria\OneDrive\Documents\GitHub\STM32WL55JCIX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "LoRaWAN_End_Node.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\adria\OneDrive\Documents\GitHub\STM32WL55JCIX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LoRaWAN_End_Node.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+LoRaWAN_End_Node.elf: $(OBJS) $(USER_OBJS) C:\Users\adria\OneDrive\Documents\software_Projects\lorawanSensor\workspace_1.5.1\workspace_1.5.1\workspace_1.5.1\LoRaWAN_End_Node\STM32WL55JCIX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "LoRaWAN_End_Node.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\adria\OneDrive\Documents\software_Projects\lorawanSensor\workspace_1.5.1\workspace_1.5.1\workspace_1.5.1\LoRaWAN_End_Node\STM32WL55JCIX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LoRaWAN_End_Node.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
