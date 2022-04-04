@@ -19,18 +19,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "app_fatfs.h"
 #include "i2c.h"
 #include "app_lorawan.h"
+#include "spi.h"
 #include "tim.h"
-#include <math.h>
 #include "gpio.h"
 
-#include "stm32_timer.h"
-#include "stm32_seq.h"				//access to sequencer functions in main
-#include "utilities_def.h"
-
-#include "radio_driver.h"		//radio drivers to access RSSI and SNR values
-#include "LmHandler.h"			//LmHandler to have access to send function in main
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
@@ -196,9 +191,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_LoRaWAN_Init();					// mainly runs LoRaWAN_Init() function defined in lora_app.c
+  MX_LoRaWAN_Init();
   MX_I2C1_Init();
   MX_TIM1_Init();
+  MX_SPI1_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
 //while(1){
@@ -336,6 +333,7 @@ int main(void)
 
   }
     /* USER CODE END WHILE */
+    MX_LoRaWAN_Process();
 
     /* USER CODE BEGIN 3 */
 

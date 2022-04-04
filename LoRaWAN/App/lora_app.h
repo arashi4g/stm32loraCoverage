@@ -41,14 +41,14 @@ extern "C" {
 #define ACTIVE_REGION                               LORAMAC_REGION_EU868
 
 /*!
- * CAYENNE_LPP is myDevices Application server.				//define CAYENNE_LPP to use the CAYENNE FORMAT
+ * CAYENNE_LPP is myDevices Application server.
  */
 /*#define CAYENNE_LPP*/
 
 /*!
  * Defines the application data transmission duty cycle. 10s, value in [ms].
  */
-#define APP_TX_DUTYCYCLE                            100
+#define APP_TX_DUTYCYCLE                            10000
 
 /*!
  * LoRaWAN User application port

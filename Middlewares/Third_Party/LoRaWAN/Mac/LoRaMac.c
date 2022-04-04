@@ -61,7 +61,6 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-extern bool rxReceived;
 #ifndef LORAMAC_VERSION
 /*!
  * LoRaWAN version definition.
@@ -842,7 +841,6 @@ static void OnRadioRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t
         MacCtx.MacCallbacks->MacProcessNotify( );
     }
     MW_LOG(TS_ON, VLEVEL_M, "MAC rxDone\r\n" );
-    rxReceived = true;
 }
 
 static void OnRadioTxTimeout( void )

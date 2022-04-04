@@ -197,16 +197,15 @@ static LmHandlerParams_t LmHandlerParams =
 static uint8_t AppLedStateOn = RESET;
 
 /**
-  * @brief Type of Event to generate application Tx (default is TX_ON_TIMER)
+  * @brief Type of Event to generate application Tx
   */
-static TxEventType_t EventType = TX_ON_EVENT;
+static TxEventType_t EventType = TX_ON_TIMER;
 
 /**
   * @brief Timer to handle the application Tx
   */
 static UTIL_TIMER_Object_t TxTimer;
-//UTIL_TIMER_Object_t TxTimer;
-//extern TxTimer;
+
 /**
   * @brief Timer to handle the application Tx Led to toggle
   */
@@ -361,7 +360,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   switch (GPIO_Pin)
   {
     case  SYS_BUTTON1_PIN:
-      /* Note: when "EventType == " this GPIO is not initialised */
+      /* Note: when "EventType == TX_ON_TIMER" this GPIO is not initialised */
       UTIL_SEQ_SetTask((1 << CFG_SEQ_Task_LoRaSendOnTxTimerOrButtonEvent), CFG_SEQ_Prio_0);
       /* USER CODE BEGIN EXTI_Callback_Switch_B1 */
       /* USER CODE END EXTI_Callback_Switch_B1 */
@@ -486,7 +485,6 @@ static void SendTxData(void)
   int16_t temperature = 0;
   sensor_t sensor_data;
   UTIL_TIMER_Time_t nextTxIn = 0;
-//  extern long arrLastPoint[];
 
 #ifdef CAYENNE_LPP
   uint8_t channel = 0;
@@ -525,46 +523,35 @@ static void SendTxData(void)
 #else  /* not CAYENNE_LPP */
   humidity    = (uint16_t)(sensor_data.humidity * 10);            /* in %*10     */
 
-//  AppData.Buffer[i++] = AppLedStateOn;
-//  AppData.Buffer[i++] = (uint8_t)((pressure >> 8) & 0xFF);
-//  AppData.Buffer[i++] = (uint8_t)(pressure & 0xFF);
-//  AppData.Buffer[i++] = (uint8_t)(temperature & 0xFF);
-//  AppData.Buffer[i++] = (uint8_t)((humidity >> 8) & 0xFF);
-//  AppData.Buffer[i++] = (uint8_t)(humidity & 0xFF);
+  AppData.Buffer[i++] = AppLedStateOn;
+  AppData.Buffer[i++] = (uint8_t)((pressure >> 8) & 0xFF);
+  AppData.Buffer[i++] = (uint8_t)(pressure & 0xFF);
+  AppData.Buffer[i++] = (uint8_t)(temperature & 0xFF);
+  AppData.Buffer[i++] = (uint8_t)((humidity >> 8) & 0xFF);
+  AppData.Buffer[i++] = (uint8_t)(humidity & 0xFF);
 
   if ((LmHandlerParams.ActiveRegion == LORAMAC_REGION_US915) || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AU915)
       || (LmHandlerParams.ActiveRegion == LORAMAC_REGION_AS923))
   {
-//    AppData.Buffer[i++] = 0;
-//    AppData.Buffer[i++] = 0;
-//    AppData.Buffer[i++] = 0;
-//    AppData.Buffer[i++] = 0;
+    AppData.Buffer[i++] = 0;
+    AppData.Buffer[i++] = 0;
+    AppData.Buffer[i++] = 0;
+    AppData.Buffer[i++] = 0;
   }
   else
   {
     latitude = sensor_data.latitude;
     longitude = sensor_data.longitude;
 
-//    AppData.Buffer[i++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
-//    AppData.Buffer[i++] = (uint8_t)((latitude >> 16) & 0xFF);
-//    AppData.Buffer[i++] = (uint8_t)((latitude >> 8) & 0xFF);
-//    AppData.Buffer[i++] = (uint8_t)(latitude & 0xFF);
-//    AppData.Buffer[i++] = (uint8_t)((longitude >> 16) & 0xFF);
-//    AppData.Buffer[i++] = (uint8_t)((longitude >> 8) & 0xFF);
-//    AppData.Buffer[i++] = (uint8_t)(longitude & 0xFF);
-//    AppData.Buffer[i++] = (uint8_t)((altitudeGps >> 8) & 0xFF);
-//    AppData.Buffer[i++] = (uint8_t)(altitudeGps & 0xFF);
-
-	AppData.Buffer[i++] = (uint8_t) ((0x01) & 0xFF);
-//	AppData.Buffer[i++] = (uint8_t) ((latitude >> 16) & 0xFF);
-//	AppData.Buffer[i++] = (uint8_t) ((latitude >> 8) & 0xFF);
-//	AppData.Buffer[i++] = (uint8_t) (latitude & 0xFF);
-//
-//	AppData.Buffer[i++] = (uint8_t) ((arrLastPoint[1] >> 24) & 0xFF);
-//	AppData.Buffer[i++] = (uint8_t) ((arrLastPoint[1] >> 16) & 0xFF);
-//	AppData.Buffer[i++] = (uint8_t) ((arrLastPoint[1] >> 8) & 0xFF);
-//	AppData.Buffer[i++] = (uint8_t) (arrLastPoint[1] & 0xFF);
-
+    AppData.Buffer[i++] = GetBatteryLevel();        /* 1 (very low) to 254 (fully charged) */
+    AppData.Buffer[i++] = (uint8_t)((latitude >> 16) & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)((latitude >> 8) & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)(latitude & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)((longitude >> 16) & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)((longitude >> 8) & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)(longitude & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)((altitudeGps >> 8) & 0xFF);
+    AppData.Buffer[i++] = (uint8_t)(altitudeGps & 0xFF);
   }
 
   AppData.BufferSize = i;
@@ -572,7 +559,7 @@ static void SendTxData(void)
 
   if (LORAMAC_HANDLER_SUCCESS == LmHandlerSend(&AppData, LORAWAN_DEFAULT_CONFIRMED_MSG_STATE, &nextTxIn, false))
   {
-    APP_LOG(TS_ON, VLEVEL_M, "SEND REQUEST\r\n");
+    APP_LOG(TS_ON, VLEVEL_L, "SEND REQUEST\r\n");
   }
   else if (nextTxIn > 0)
   {
@@ -662,18 +649,17 @@ static void OnTxData(LmHandlerTxParams_t *params)
     UTIL_TIMER_Start(&TxLedTimer);
 
     APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### ========== MCPS-Confirm =============\r\n");
-    APP_LOG(TS_OFF, VLEVEL_M, "###### U/L FRAME:%04d | PORT:%d | DR:%d | PWR:%d", params->UplinkCounter,
+    APP_LOG(TS_OFF, VLEVEL_H, "###### U/L FRAME:%04d | PORT:%d | DR:%d | PWR:%d", params->UplinkCounter,
             params->AppData.Port, params->Datarate, params->TxPower);
-    mLockout = false;
-    APP_LOG(TS_OFF, VLEVEL_M, " | MSG TYPE:");
+
+    APP_LOG(TS_OFF, VLEVEL_H, " | MSG TYPE:");
     if (params->MsgType == LORAMAC_HANDLER_CONFIRMED_MSG)
     {
-      APP_LOG(TS_OFF, VLEVEL_M, "CONFIRMED [%s]\r\n", (params->AckReceived != 0) ? "ACK" : "NACK");
+      APP_LOG(TS_OFF, VLEVEL_H, "CONFIRMED [%s]\r\n", (params->AckReceived != 0) ? "ACK" : "NACK");
     }
     else
     {
-      APP_LOG(TS_OFF, VLEVEL_M, "UNCONFIRMED\r\n");
-      rxReceived = false;
+      APP_LOG(TS_OFF, VLEVEL_H, "UNCONFIRMED\r\n");
     }
   }
 
@@ -708,15 +694,11 @@ static void OnJoinRequest(LmHandlerJoinParams_t *joinParams)
       else
       {
         APP_LOG(TS_OFF, VLEVEL_M, "OTAA =====================\r\n");
-        isJoined = true;
-        rxReceived = false;
       }
     }
     else
     {
-      APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### = JOIN FAILED this?\r\n");
-      isJoined = false;
-      rxReceived = false;
+      APP_LOG(TS_OFF, VLEVEL_M, "\r\n###### = JOIN FAILED\r\n");
     }
   }
 

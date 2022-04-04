@@ -57,7 +57,7 @@ extern "C" {
   * @brief Enable Debugger mode
   * @note  1:ON it enables the debbugger plus 4 dgb pins, 0:OFF the debugger is OFF (lower consumption)
   */
-#define DEBUGGER_ON       1
+#define DEBUGGER_ON       0
 
 /**
   * @brief Disable Low Power mode
