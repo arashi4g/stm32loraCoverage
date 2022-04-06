@@ -23,6 +23,11 @@
 #include "stm32wlxx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+extern uint16_t Timer1, Timer2;
+extern DMA_HandleTypeDef hdma_spi1_tx;
+extern SPI_HandleTypeDef hspi1;
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -190,7 +195,11 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
+	if(Timer1 > 0)
+		Timer1--;
 
+	if(Timer2 > 0)
+		Timer2--;
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
@@ -215,7 +224,7 @@ void TAMP_STAMP_LSECSS_SSRU_IRQHandler(void)
   /* USER CODE END TAMP_STAMP_LSECSS_SSRU_IRQn 0 */
   HAL_RTCEx_SSRUIRQHandler(&hrtc);
   /* USER CODE BEGIN TAMP_STAMP_LSECSS_SSRU_IRQn 1 */
-
+  	  HAL_SYSTICK_IRQHandler();
   /* USER CODE END TAMP_STAMP_LSECSS_SSRU_IRQn 1 */
 }
 

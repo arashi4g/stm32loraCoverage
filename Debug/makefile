@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (9-2020-q2-update)
+# Toolchain: GNU Tools for STM32 (10.3-2021.10)
 ################################################################################
 
 -include ../makefile.init
@@ -21,8 +21,12 @@ RM := rm -rf
 -include Middlewares/Third_Party/LoRaWAN/LmHandler/Packages/subdir.mk
 -include Middlewares/Third_Party/LoRaWAN/LmHandler/subdir.mk
 -include Middlewares/Third_Party/LoRaWAN/Crypto/subdir.mk
+-include Middlewares/Third_Party/FatFs/src/option/subdir.mk
+-include Middlewares/Third_Party/FatFs/src/subdir.mk
 -include LoRaWAN/Target/subdir.mk
 -include LoRaWAN/App/subdir.mk
+-include FATFS/Target/subdir.mk
+-include FATFS/App/subdir.mk
 -include Drivers/STM32WLxx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
@@ -72,14 +76,14 @@ BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ART
 EXECUTABLES += \
 LoRaWAN_End_Node.elf \
 
+MAP_FILES += \
+LoRaWAN_End_Node.map \
+
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
 LoRaWAN_End_Node.list \
-
-OBJCOPY_BIN += \
-LoRaWAN_End_Node.bin \
 
 
 # All Target
@@ -89,8 +93,8 @@ all: main-build
 main-build: LoRaWAN_End_Node.elf secondary-outputs
 
 # Tool invocations
-LoRaWAN_End_Node.elf: $(OBJS) $(USER_OBJS) C:\Users\adria\OneDrive\Documents\software_Projects\lorawanSensor\workspace_1.5.1\workspace_1.5.1\workspace_1.5.1\LoRaWAN_End_Node\STM32WL55JCIX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "LoRaWAN_End_Node.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\adria\OneDrive\Documents\software_Projects\lorawanSensor\workspace_1.5.1\workspace_1.5.1\workspace_1.5.1\LoRaWAN_End_Node\STM32WL55JCIX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LoRaWAN_End_Node.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+LoRaWAN_End_Node.elf LoRaWAN_End_Node.map: $(OBJS) $(USER_OBJS) C:\Users\Adrian\Documents\software_Projects\lorawanSensor\workspace_1.5.1\workspace_1.5.1\workspace_1.5.1\LoRaWAN_End_Node\STM32WL55JCIX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "LoRaWAN_End_Node.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Adrian\Documents\software_Projects\lorawanSensor\workspace_1.5.1\workspace_1.5.1\workspace_1.5.1\LoRaWAN_End_Node\STM32WL55JCIX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LoRaWAN_End_Node.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -104,17 +108,12 @@ LoRaWAN_End_Node.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS
 	@echo 'Finished building: $@'
 	@echo ' '
 
-LoRaWAN_End_Node.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "LoRaWAN_End_Node.bin"
-	@echo 'Finished building: $@'
-	@echo ' '
-
 # Other Targets
 clean:
-	-$(RM) LoRaWAN_End_Node.bin LoRaWAN_End_Node.elf LoRaWAN_End_Node.list default.size.stdout
+	-$(RM) LoRaWAN_End_Node.elf LoRaWAN_End_Node.list LoRaWAN_End_Node.map default.size.stdout
 	-@echo ' '
 
-secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)
+secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
 
 fail-specified-linker-script-missing:
 	@echo 'Error: Cannot find the specified linker script. Check the linker settings in the build configuration.'

@@ -1,2 +1,3 @@
-app_lorawan.c:72:6:MX_LoRaWAN_Init	8	static
-app_lorawan.c:89:6:MX_LoRaWAN_Process	8	static
+../LoRaWAN/App/app_lorawan.c:72:6:MX_LoRaWAN_Init	8	static
+../LoRaWAN/App/app_lorawan.c:89:6:MX_LoRaWAN_Process	8	static
+../LoRaWAN/App/app_lorawan.c:108:6:testFunktion	4	static

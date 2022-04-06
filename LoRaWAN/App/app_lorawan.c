@@ -105,7 +105,11 @@ void MX_LoRaWAN_Process(void)
 
 /* Private Functions Definition -----------------------------------------------*/
 /* USER CODE BEGIN PrFD */
+void testFunktion(void){
+	if(1){
 
+	}
+}
 /* USER CODE END PrFD */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

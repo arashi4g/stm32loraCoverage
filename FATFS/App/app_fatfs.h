@@ -22,10 +22,16 @@
 #ifndef __APP_FATFS_H
 #define __APP_FATFS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
+
 #include "ff.h"
 #include "ff_gen_drv.h"
 #include "user_diskio.h" /* defines USER_Driver as external */
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -50,6 +56,9 @@
 /* Exported functions prototypes ---------------------------------------------*/
 int32_t MX_FATFS_Init(void);
 int32_t MX_FATFS_Process(void);
+
+
+//int testTest = 0;
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
@@ -64,6 +73,10 @@ int32_t MX_FATFS_Process(void);
 extern FATFS USERFatFs;    /* File system object for USER logical drive */
 extern FIL USERFile;       /* File  object for USER */
 extern char USERPath[4];   /* USER logical drive path */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /*__APP_FATFS_H */
 

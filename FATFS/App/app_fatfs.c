@@ -20,7 +20,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "app_fatfs.h"
-#include "main.h"
+
+
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

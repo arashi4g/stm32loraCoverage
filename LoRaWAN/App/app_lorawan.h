@@ -36,7 +36,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+void testFunktion(void);
 /* USER CODE END EC */
 
 /* External variables --------------------------------------------------------*/
