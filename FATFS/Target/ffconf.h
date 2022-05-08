@@ -20,6 +20,10 @@
 #ifndef _FFCONF
 #define _FFCONF 68300	/* Revision ID */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*-----------------------------------------------------------------------------/
 / Additional user header to be used
 /-----------------------------------------------------------------------------*/
@@ -263,6 +267,10 @@
 #include <stdlib.h>
 #define ff_malloc  malloc
 #define ff_free  free
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* _FFCONF */

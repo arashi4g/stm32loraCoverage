@@ -224,93 +224,93 @@ int main(void)
 //}
 
 //  /* Waiting for the Micro SD module to initialize */
-//		HAL_Delay(500);
-//
-//		fres = f_mount(&fs, "", 0);
-//		if (fres == FR_OK) {
-////			transmit_uart("Micro SD card is mounted successfully!\n");
-//			  APP_LOG(TS_ON, VLEVEL_M, "Micro SD card is mounted successfully! \r\n");
-//
-//		} else if (fres != FR_OK) {
-////			transmit_uart("Micro SD card's mount error!\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "Micro SD card's mount error! \r\n");
-//		}
-//
-//		// FA_OPEN_APPEND opens file if it exists and if not then creates it,
-//		// the pointer is set at the end of the file for appending
-//		fres = f_open(&fil, "log-file.txt", FA_OPEN_APPEND | FA_WRITE | FA_READ);
-//		if (fres == FR_OK) {
-////			transmit_uart("File opened for reading and checking the free space.\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "File opened for reading and checking the free space. \r\n");
-//		} else if (fres != FR_OK) {
-////			transmit_uart("File was not opened for reading and checking the free space!\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "File was not opened for reading and checking the free space! \r\n");
-//		}
-//
-//		fres = f_getfree("", &fre_clust, &pfs);
-//		totalSpace = (uint32_t) ((pfs->n_fatent - 2) * pfs->csize * 0.5);
-//		freeSpace = (uint32_t) (fre_clust * pfs->csize * 0.5);
-//		char mSz[12];
-//		sprintf(mSz, "%lu", freeSpace);
-//		if (fres == FR_OK) {
-////			transmit_uart("The free space is: ");
-////			transmit_uart(mSz);
-////			transmit_uart("\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "The free space is: %d \r\n", mSz);
-//		} else if (fres != FR_OK) {
-////			transmit_uart("The free space could not be determined!\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "The free space could not be determined! \r\n");
-//		}
-//
-//		for (uint8_t i = 0; i < 10; i++) {
-//			f_puts("This text is written in the file.\n", &fil);
-//		}
-//
-//		fres = f_close(&fil);
-//		if (fres == FR_OK) {
-////			transmit_uart("The file is closed.\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "The file is closed. \r\n");
-//		} else if (fres != FR_OK) {
-////			transmit_uart("The file was not closed.\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "The file was not closed. \r\n");
-//		}
-//
-//		/* Open file to read */
-//		fres = f_open(&fil, "log-file.txt", FA_READ);
-//		if (fres == FR_OK) {
-////			transmit_uart("File opened for reading.\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "File opened for reading. \r\n");
-//		} else if (fres != FR_OK) {
-////			transmit_uart("File was not opened for reading!\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "File not opened for reading! \r\n");
-//		}
-//
-//		while (f_gets(buffer, sizeof(buffer), &fil)) {
-//			char mRd[100];
-//			sprintf(mRd, "%s", buffer);
-////			transmit_uart(mRd);
-//			APP_LOG(TS_ON, VLEVEL_M, "mRd: %d \r\n", mRd);
-//
-//		}
-//
-//		/* Close file */
-//		fres = f_close(&fil);
-//		if (fres == FR_OK) {
-////			transmit_uart("The file is closed.\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "The file is closed. \r\n");
-//		} else if (fres != FR_OK) {
-////			transmit_uart("The file was not closed.\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "The file was not closed. \r\n");
-//		}
-//
-//		f_mount(NULL, "", 1);
-//		if (fres == FR_OK) {
-////			transmit_uart("The Micro SD card is unmounted!\n");
-//			APP_LOG(TS_ON, VLEVEL_M, "The Micro SD card is unmounted! \r\n");
-//		} else if (fres != FR_OK) {
-////			transmit_uart("The Micro SD was not unmounted!");
-//			APP_LOG(TS_ON, VLEVEL_M, "The Micro SD was not unmounted! \r\n");
-//		}
+		HAL_Delay(500);
+
+		fres = f_mount(&fs, "", 0);
+		if (fres == FR_OK) {
+//			transmit_uart("Micro SD card is mounted successfully!\n");
+			  APP_LOG(TS_ON, VLEVEL_M, "Micro SD card is mounted successfully! \r\n");
+
+		} else if (fres != FR_OK) {
+//			transmit_uart("Micro SD card's mount error!\n");
+			APP_LOG(TS_ON, VLEVEL_M, "Micro SD card's mount error! \r\n");
+		}
+
+		// FA_OPEN_APPEND opens file if it exists and if not then creates it,
+		// the pointer is set at the end of the file for appending
+		fres = f_open(&fil, "log-file.txt", FA_OPEN_APPEND | FA_WRITE | FA_READ);
+		if (fres == FR_OK) {
+//			transmit_uart("File opened for reading and checking the free space.\n");
+			APP_LOG(TS_ON, VLEVEL_M, "File opened for reading and checking the free space. \r\n");
+		} else if (fres != FR_OK) {
+//			transmit_uart("File was not opened for reading and checking the free space!\n");
+			APP_LOG(TS_ON, VLEVEL_M, "File was not opened for reading and checking the free space! \r\n");
+		}
+
+		fres = f_getfree("", &fre_clust, &pfs);
+		totalSpace = (uint32_t) ((pfs->n_fatent - 2) * pfs->csize * 0.5);
+		freeSpace = (uint32_t) (fre_clust * pfs->csize * 0.5);
+		char mSz[12];
+		sprintf(mSz, "%lu", freeSpace);
+		if (fres == FR_OK) {
+//			transmit_uart("The free space is: ");
+//			transmit_uart(mSz);
+//			transmit_uart("\n");
+			APP_LOG(TS_ON, VLEVEL_M, "The free space is: %d \r\n", mSz);
+		} else if (fres != FR_OK) {
+//			transmit_uart("The free space could not be determined!\n");
+			APP_LOG(TS_ON, VLEVEL_M, "The free space could not be determined! \r\n");
+		}
+
+		for (uint8_t i = 0; i < 10; i++) {
+			f_puts("This text is written in the file.\n", &fil);
+		}
+
+		fres = f_close(&fil);
+		if (fres == FR_OK) {
+//			transmit_uart("The file is closed.\n");
+			APP_LOG(TS_ON, VLEVEL_M, "The file is closed. \r\n");
+		} else if (fres != FR_OK) {
+//			transmit_uart("The file was not closed.\n");
+			APP_LOG(TS_ON, VLEVEL_M, "The file was not closed. \r\n");
+		}
+
+		/* Open file to read */
+		fres = f_open(&fil, "log-file.txt", FA_READ);
+		if (fres == FR_OK) {
+//			transmit_uart("File opened for reading.\n");
+			APP_LOG(TS_ON, VLEVEL_M, "File opened for reading. \r\n");
+		} else if (fres != FR_OK) {
+//			transmit_uart("File was not opened for reading!\n");
+			APP_LOG(TS_ON, VLEVEL_M, "File not opened for reading! \r\n");
+		}
+
+		while (f_gets(buffer, sizeof(buffer), &fil)) {
+			char mRd[100];
+			sprintf(mRd, "%s", buffer);
+//			transmit_uart(mRd);
+			APP_LOG(TS_ON, VLEVEL_M, "mRd: %d \r\n", mRd);
+
+		}
+
+		/* Close file */
+		fres = f_close(&fil);
+		if (fres == FR_OK) {
+//			transmit_uart("The file is closed.\n");
+			APP_LOG(TS_ON, VLEVEL_M, "The file is closed. \r\n");
+		} else if (fres != FR_OK) {
+//			transmit_uart("The file was not closed.\n");
+			APP_LOG(TS_ON, VLEVEL_M, "The file was not closed. \r\n");
+		}
+
+		f_mount(NULL, "", 1);
+		if (fres == FR_OK) {
+//			transmit_uart("The Micro SD card is unmounted!\n");
+			APP_LOG(TS_ON, VLEVEL_M, "The Micro SD card is unmounted! \r\n");
+		} else if (fres != FR_OK) {
+//			transmit_uart("The Micro SD was not unmounted!");
+			APP_LOG(TS_ON, VLEVEL_M, "The Micro SD was not unmounted! \r\n");
+		}
 
 
 #if doGPS == 1
